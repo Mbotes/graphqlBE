@@ -12,7 +12,8 @@ let  idCount = links.length
 const resolvers = {
     Query: {
         info: () => 'null',
-        feed: () => links
+        feed: () => links,
+        link: (props) => links[props.id] 
     },
     Mutation: {
         post: (root, args) => {
@@ -23,6 +24,29 @@ const resolvers = {
             }
             links.push(link)
             return link
+        },
+
+        updateLink: (root, args) => {
+            const link = {
+                id: args.id,
+                description: args.description,
+                url: args.url
+            }
+
+            var foundIndex = links.findIndex(x => x.id== link.id)
+            links[foundIndex] = link
+            return link
+
+        },
+
+        deleteLink: (root, args) => {
+            var foundIndex = links.findIndex(x => x.id == args.id)
+
+            if (foundIndex !== -1) {
+                links.splice(foundIndex, 1)
+            }
+
+            return {data: "delted!"}
         }
     }
 }
